@@ -223,6 +223,43 @@ class CSVServiceNew:
             for product in products_without_price:
                 product.amount = max_price
                 product.save()
+                # Часы
+                max_prices_watch = (
+                    NewProductModel.objects.filter(amount__gt='0', subcategory__category__name='Watch')
+                    .values('params__Серия', 'params__Поставщик', 'params__Размер')
+                    .annotate(max_price=Max('amount'))
+                )
+                for max_price_info in max_prices_watch:
+                    max_price = max_price_info['max_price']
+                    series = max_price_info['params__Серия']
+                    size = max_price_info['params__Размер']
+                    provider = max_price_info['params__Поставщик']
+                    products_without_price = NewProductModel.objects.filter(
+                        params__Серия=series,
+                        params__Размер=size,
+                        params__Поставщик=provider,
+                        amount='0')
+                    for product in products_without_price:
+                        product.amount = max_price
+                        product.save()
+
+        # Dyson
+        max_dyson_watch = (
+            NewProductModel.objects.filter(amount__gt='0', subcategory__category__name='Dyson')
+            .values('params__Серия', 'params__Поставщик', )
+            .annotate(max_price=Max('amount'))
+        )
+        for max_price_info in max_dyson_watch:
+            max_price = max_price_info['max_price']
+            series = max_price_info['params__Серия']
+            provider = max_price_info['params__Поставщик']
+            products_dyson_price = NewProductModel.objects.filter(
+                params__Серия=series,
+                params__Поставщик=provider,
+                amount='0')
+            for product in products_dyson_price:
+                product.amount = max_price
+                product.save()
 
     def write(self):
         data = []
