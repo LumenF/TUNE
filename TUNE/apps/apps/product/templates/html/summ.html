@@ -1,0 +1,307 @@
+{% extends 'html/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="wrapper">
+  <div class="sidebar">
+      <div class="block_sidebar">
+          <h5>Месяц</h5>
+            <ul>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=1 %}">Январь</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=2 %}">Февраль</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=3 %}">Март</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=4 %}">Апрель</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=5 %}">Май</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=6 %}">Июнь</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=7 %}">Июль</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=8 %}">Август</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=9 %}">Сентябрь</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=10 %}">Октябрь</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=11 %}">Ноябрь</a></li>
+                <li><a href="{% url 'summ_product_static' year=request.resolver_match.kwargs.year month=12 %}">Декабрь</a></li>
+            </ul>
+      </div>
+      <div class="block_sidebar">
+          <h5>Год</h5>
+            <ul>
+              <li><a href="{% url 'summ_product_static' year=2023 month=request.resolver_match.kwargs.month %}">2023</a></li>
+              <li><a href="{% url 'summ_product_static' year=2024 month=request.resolver_match.kwargs.month %}">2024</a></li>
+            </ul>
+      </div>
+
+  </div>
+  <div class="content">
+      <div class="chart">
+            <div class="content">
+                <div class="container">
+                    <figure class="highcharts-figure">
+                        <div class="highcharts_container">
+                            <div id="container_month"></div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+         </div>
+        <div class="chart">
+            <div class="content">
+                <div class="container">
+                    <figure class="highcharts-figure">
+                        <div class="highcharts_container">
+                            <div id="container_not"></div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <div class="chart">
+            <div class="content">
+                <div class="container">
+                    <figure class="highcharts-figure">
+                        <div class="highcharts_container">
+                            <div id="container_all"></div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    Highcharts.chart('container_month', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        align: 'left',
+        text: 'Прибыль за выбранный период'
+      },
+      subtitle: {
+        align: 'left',
+        text: 'Данные: {{ title }}'
+      },
+      accessibility: {
+        announceNewData: {
+          enabled: true
+        }
+      },
+      xAxis: {
+        type: 'category'
+      },
+
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            format: '{point.y:.f} руб'
+          }
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}р</b> of total<br/>'
+      },
+
+      series: [
+        {
+          name: 'Все категории',
+          colorByPoint: true,
+          data: [
+            {% for i in summ_product_category %}
+                {
+                    name: '{{ i.category }}',
+                    y: {{ i.amount }},
+                    drilldown: '{{ i.category }}',
+                },
+            {% endfor %}
+
+          ]
+        }
+      ],
+      drilldown: {
+        breadcrumbs: {
+          position: {
+            align: 'right'
+          }
+        },
+        series: [
+            {% for i in summ_product_subcategory %}
+                {
+                    name: '{{ i.name }}',
+                    id: '{{ i.name }}',
+                    data: {{ i.values|safe }}
+                },
+            {% endfor %}
+        ]
+      }
+    });
+</script>
+
+
+<script>
+Highcharts.chart('container_not', {
+  chart: {
+    type: 'column'
+  },
+  title: {
+    align: 'left',
+    text: 'Ожидаемая прибыль от активных товаров'
+  },
+  subtitle: {
+    align: 'left',
+    text: 'Данные за всю историю'
+  },
+  accessibility: {
+    announceNewData: {
+      enabled: true
+    }
+  },
+  xAxis: {
+    type: 'category'
+  },
+  yAxis: {
+    title: {
+      text: 'Данные всех товаров в базе'
+    }
+  },
+  legend: {
+    enabled: false
+  },
+  plotOptions: {
+    series: {
+      borderWidth: 0,
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.f} руб'
+      }
+    }
+  },
+  tooltip: {
+    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}р</b> of total<br/>'
+  },
+
+  series: [
+    {
+      name: 'Все категории',
+      colorByPoint: true,
+      data: [
+        {% for i in summ_product_category_not %}
+            {
+                name: '{{ i.category }}',
+                y: {{ i.amount }},
+                drilldown: '{{ i.category }}',
+            },
+        {% endfor %}
+
+      ]
+    }
+  ],
+  drilldown: {
+    breadcrumbs: {
+      position: {
+        align: 'right'
+      }
+    },
+    series: [
+        {% for i in summ_product_subcategory_not %}
+            {
+                name: '{{ i.name }}',
+                id: '{{ i.name }}',
+                data: {{ i.values|safe }}
+            },
+        {% endfor %}
+
+
+    ]
+  }
+});
+</script>
+
+<script>
+Highcharts.chart('container_all', {
+  chart: {
+    type: 'column'
+  },
+  title: {
+    align: 'left',
+    text: 'Стоимость всех проданных товаров за всю историю'
+  },
+  subtitle: {
+    align: 'left',
+    text: 'Данные за всю историю'
+  },
+  accessibility: {
+    announceNewData: {
+      enabled: true
+    }
+  },
+  xAxis: {
+    type: 'category'
+  },
+  yAxis: {
+    title: {
+      text: 'Данные всех товаров в базе'
+    }
+  },
+  legend: {
+    enabled: false
+  },
+  plotOptions: {
+    series: {
+      borderWidth: 0,
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.f} руб'
+      }
+    }
+  },
+  tooltip: {
+    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}р</b> of total<br/>'
+  },
+
+  series: [
+    {
+      name: 'Все категории',
+      colorByPoint: true,
+      data: [
+        {% for i in product_category %}
+            {
+                name: '{{ i.category }}',
+                y: {{ i.amount }},
+                drilldown: '{{ i.category }}',
+            },
+        {% endfor %}
+
+      ]
+    }
+  ],
+  drilldown: {
+    breadcrumbs: {
+      position: {
+        align: 'right'
+      }
+    },
+    series: [
+        {% for i in product_subcategory %}
+            {
+                name: '{{ i.name }}',
+                id: '{{ i.name }}',
+                data: {{ i.values|safe }}
+            },
+        {% endfor %}
+
+
+    ]
+  }
+});
+</script>
+{% endblock %}

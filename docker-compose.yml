@@ -1,0 +1,56 @@
+version: '3'
+
+networks:
+  tune_1:
+    driver: bridge
+
+services:
+  cron:
+    build: ./crontab
+    restart: always
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - '8112:80'
+    networks:
+      - tune_1
+
+  web:
+    build: ./TUNE
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    env_file: ./TUNE/.prod.env
+    environment:
+      DEVELOPMENT: False
+      DEBUG: False
+    networks:
+      - tune_1
+    depends_on:
+      - nginx
+
+  celery:
+    build: ./TUNE
+    command: celery -A TUNE worker -l info
+    restart: always
+    networks:
+      - tune_1
+    depends_on:
+      - nginx
+      - web
+
+  bot:
+    build: ./TUNE_BOT
+    command: python main.py
+    restart: always
+    env_file: ./TUNE_BOT/.prod.env
+    links:
+      - web
+    environment:
+      BACKEND_URL: web
+    networks:
+      - tune
+    depends_on:
+      - nginx
+      - web

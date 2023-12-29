@@ -1,0 +1,148 @@
+{% extends 'html/site/base.html' %}
+{% load static %}
+{% load poll_extras %}
+{% block title %} Каталог {% endblock %}
+{% block content %}
+{% load crispy_forms_tags %}
+    <link rel="stylesheet" href="{% static 'css/category.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+  $( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 200000,
+      values: [ 0, 30000 ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+      }
+    });
+    $( "#amount" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) );
+  } );
+  </script>
+
+<div style="width: 100%; padding-left: 5%; padding-right: 5%">
+    <div class="d-flex  bd-highlight justify-content-between" style="overflow: auto; width: 100%" id="i_cart_wrapper">
+        {% for el_category in category_carousel %}
+            <a href="{% url 'catalog' el_category.slug %}">
+                <div class="block_sidebar" style="width: 100%; height: 100%;  min-width: 90px; min-height: 90px;">
+                    <div class="i_cart" style="display: inline-block; padding: 10%; ">
+                        <div class="i_img" style="max-width: 100%;">
+                            <img src="{{ el_category.image.url }}" alt="img" style=" border-radius: 30%; max-height: 100px;">
+                        </div>
+                        <div class="i_caption" style="text-align: center">
+                            <a><p>{{ el_category.name }}</p></a>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="{% url 'catalog' el_category.slug %}">
+                <div class="block_sidebar" style="width: 100%; height: 100%;  min-width: 90px; min-height: 90px;">
+                    <div class="i_cart" style="display: inline-block; padding: 10%; ">
+                        <div class="i_img" style="max-width: 100%;">
+                            <img src="{{ el_category.image.url }}" alt="img" style=" border-radius: 30%; max-height: 100px;">
+                        </div>
+                        <div class="i_caption" style="text-align: center">
+                            <a><p>{{ el_category.name }}</p></a>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="catalog" >
+    <div class="catalog_filter" style="display: flex; justify-content: left; width: 100%; padding-bottom: 20px; padding-top: 10px; padding-left: 5%">
+        <button type="button" class="btn btn-primary d-lg-none" style="background: none; color: black; border: 1px solid #c7c7c7" data-bs-toggle="modal" data-bs-target="#filtersModal">
+          Фильтры
+        </button>
+    </div>
+    <div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="filtersModalLabel">Фильтры</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                <form method="get" action="{% url 'catalog' category='Phone' %}">
+                    {% csrf_token %}
+                      {% for key, values in dictionary.items %}
+                          <br>
+                          <label for="{{ key }}">{{ key }}:</label>
+                          <div style="display: flex; flex-direction: column;">
+                              {% for value in values %}
+                                  <div>
+                                  <input type="checkbox" id="{{ value }}" name="{{ value }}" {% if value in selected_values %} checked {% endif %}>
+                                    <label for="{{ value }}">{{ value }}</label>
+                                  </div>
+                              {% endfor %}
+                          </div>
+                      {% endfor %}
+                        <p>
+                        <label for="amount">Цена:</label>
+                        <input type="text" id="amount" readonly style=" color:#f6931f; font-weight:bold;">
+
+                        </p>
+                        <div id="slider-range" style="padding-bottom: 10px"></div>
+                  <button type="submit" style="padding-top: 10px; border: 1px solid #ff0000 " >Применить фильтры</button>
+                </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+            <div class="col-lg-3 d-lg-block d-none">
+                <form method="get" action="{% url 'catalog' category='Phone' %}">
+                    {% csrf_token %}
+                      {% for key, values in dictionary.items %}
+                          <br>
+                          <label for="{{ key }}">{{ key }}:</label>
+                          <div style="display: flex; flex-direction: column;">
+                              {% for value in values %}
+                                  <div>
+                                  <input type="checkbox" id="{{ value }}" name="{{ value }}" {% if value in selected_values %} checked {% endif %}>
+                                    <label for="{{ value }}">{{ value }}</label>
+                                  </div>
+                              {% endfor %}
+                          </div>
+                      {% endfor %}
+                        <p>
+                        <label for="amount">Цена:</label>
+                        <input type="text" id="amount" readonly style=" color:#f6931f; font-weight:bold;">
+
+                        </p>
+                        <div id="slider-range" ></div>
+                  <button type="submit" style="font-size: 17px; font-weight: bold; float: left;" >Применить фильтры</button>
+                </form>
+            </div>
+            <div class="p_cart_wrapper">
+                <div class="p_cart_content">
+                    {% for obj in filter.qs %}
+                        <div class="p_cart" style="max-width: 100px;">
+                            <div class="p_cart_img">
+                                <img src="{{ obj.preview.url }}" alt="Название">
+                            </div>
+                            <div class="p_cart_title">
+                                <h5>{{ obj.name }}</h5>
+                            </div>
+                            <div class="p_cart_btn">
+                                <button class="btn btn-primary" id="p_btn" style="max-height: 10%">В корзину</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

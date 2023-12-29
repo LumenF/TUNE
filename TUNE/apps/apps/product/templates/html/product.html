@@ -1,0 +1,166 @@
+{% extends 'html/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="wrapper">
+  <div class="sidebar">
+      <div class="block_sidebar">
+          <h5>Месяц</h5>
+            <ul>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=1 category_id=request.resolver_match.kwargs.category_id%}">Январь</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=2 category_id=request.resolver_match.kwargs.category_id%}">Февраль</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=3 category_id=request.resolver_match.kwargs.category_id%}">Март</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=4 category_id=request.resolver_match.kwargs.category_id%}">Апрель</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=5 category_id=request.resolver_match.kwargs.category_id%}">Май</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=6 category_id=request.resolver_match.kwargs.category_id%}">Июнь</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=7 category_id=request.resolver_match.kwargs.category_id%}">Июль</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=8 category_id=request.resolver_match.kwargs.category_id%}">Август</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=9 category_id=request.resolver_match.kwargs.category_id%}">Сентябрь</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=10 category_id=request.resolver_match.kwargs.category_id%}">Октябрь</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=11 category_id=request.resolver_match.kwargs.category_id%}">Ноябрь</a></li>
+                <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=12 category_id=request.resolver_match.kwargs.category_id%}">Декабрь</a></li>
+            </ul>
+      </div>
+      <div class="block_sidebar">
+          <h5>Год</h5>
+            <ul>
+              <li><a href="{% url 'product_static' year=2023 month=request.resolver_match.kwargs.month category_id=request.resolver_match.kwargs.category_id%}">2023</a></li>
+              <li><a href="{% url 'product_static' year=2024 month=request.resolver_match.kwargs.month category_id=request.resolver_match.kwargs.category_id%}">2024</a></li>
+            </ul>
+      </div>
+
+  </div>
+  <div class="content">
+        <div class="chart">
+            <div class="content">
+                <div class="container">
+                    <figure class="highcharts-figure">
+                        <div class="highcharts_container">
+                            <div id="product_views"></div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block_sidebar_right">
+      <h5>Категория</h5>
+        <ul>
+            {% for i in category_data %}
+
+            <li><a href="{% url 'product_static' year=request.resolver_match.kwargs.year month=request.resolver_match.kwargs.month category_id=i.id%}?id={{i.id}}" id="{{ i.id }}">{{ i.name }}</a></li>
+            {% endfor %}
+        </ul>
+   </div>
+</div>
+<script type="text/javascript">
+const links = document.querySelectorAll('a');
+
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    links.forEach(link => link.classList.remove('active'));
+    link.classList.add('active');
+    localStorage.setItem('activeLinkId', link.id);
+  });
+});
+
+const activeLinkId = localStorage.getItem('activeLinkId');
+if (activeLinkId) {
+  const activeLink = document.getElementById(activeLinkId);
+  if (activeLink) {
+    activeLink.classList.add('active');
+  }
+}
+
+</script>
+<script>
+
+Highcharts.chart('product_views', {
+  chart: {
+    scrollablePlotArea: {
+      minWidth: 700
+    }
+  },
+
+  title: {
+    text: 'Показы',
+    align: 'left'
+  },
+
+  subtitle: {
+    text: 'Период: {{ title|safe }}',
+    align: 'left'
+  },
+
+  xAxis: {
+    tickWidth: 0,
+    gridLineWidth: 1,
+    labels: {
+      align: 'left',
+    },
+    categories: {{ days|safe }},
+
+  },
+  yAxis: [{
+
+    title: {
+      text: null
+    },
+    labels: {
+      align: 'left',
+      x: 3,
+      y: 16,
+      format: '{value:.,0f}'
+    },
+    showFirstLabel: false
+  }, {
+    linkedTo: 0,
+    gridLineWidth: 0,
+    opposite: true,
+    title: {
+      text: null
+    },
+    labels: {
+      align: 'right',
+      x: -3,
+      y: 16,
+      format: '{value:.,0f}'
+    },
+    showFirstLabel: false
+  }],
+
+  legend: {
+    align: 'left',
+    verticalAlign: 'top',
+    borderWidth: 0
+  },
+  tooltip: {
+    shared: true,
+    crosshairs: true,
+  },
+
+  plotOptions: {
+    series: {
+      cursor: 'pointer',
+      className: 'popup-on-click',
+      marker: {
+        lineWidth: 1
+      }
+    }
+  },
+
+  series: [
+  {% for i in products %}
+      {
+        name: '{{ i.name }}',
+        data: {{ i.values }},
+      },
+  {% endfor %}
+
+  ]
+});
+</script>
+
+
+{% endblock %}

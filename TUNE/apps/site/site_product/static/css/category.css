@@ -1,0 +1,9 @@
+.p_cart_wrapper{
+    width: 100%;
+    border: 1px solid #dcdcdc;
+}
+
+.p_cart_content{
+    display: flex;
+    flex-direction: row;
+}

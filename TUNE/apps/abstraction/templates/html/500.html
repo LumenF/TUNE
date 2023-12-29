@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; {% translate 'Server error' %}
+</div>
+{% endblock %}
+
+{% block title %}{% translate 'Server error (500)' %}{% endblock %}
+
+{% block content %}
+<h1>{% translate 'Server Error <em>(500)</em>' %}</h1>
+
+    <p>Обратитесь с администратору:</p><br>
+     <a href="https://t.me/lindel33">Телеграм</a><br>
+     <a href="mailto:pyostr@gmail.com"> Почта</a>
+{% endblock %}

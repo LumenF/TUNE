@@ -1,0 +1,294 @@
+{% extends 'html/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="wrapper">
+  <div class="sidebar">
+      <div class="block_sidebar">
+          <h5>Месяц</h5>
+            <ul>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=1 %}">Январь</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=2 %}">Февраль</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=3 %}">Март</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=4 %}">Апрель</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=5 %}">Май</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=6 %}">Июнь</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=7 %}">Июль</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=8 %}">Август</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=9 %}">Сентябрь</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=10 %}">Октябрь</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=11 %}">Ноябрь</a></li>
+              <li><a href="{% url 'user_active' year=request.resolver_match.kwargs.year month=12 %}">Декабрь</a></li>
+            </ul>
+      </div>
+      <div class="block_sidebar">
+          <h5>Год</h5>
+            <ul>
+              <li><a href="{% url 'user_active' year=2023 month=request.resolver_match.kwargs.month %}">2023</a></li>
+              <li><a href="{% url 'user_active' year=2024 month=request.resolver_match.kwargs.month %}">2024</a></li>
+            </ul>
+      </div>
+  </div>
+  <div class="content">
+    <div class="chart">
+      <div class="content">
+        <div class="container">
+            <figure class="highcharts-figure">
+                <div class="highcharts_container">
+                    <div id="container_active"></div>
+                </div>
+            </figure>
+        </div>
+      </div>
+    </div>
+    <div class="chart">
+      <div class="content">
+        <div class="container">
+            <figure class="highcharts-figure">
+                <div class="highcharts_container">
+                    <div id="container_register"></div>
+                </div>
+            </figure>
+        </div>
+      </div>
+    </div>
+    <div class="chart">
+        <div class="content">
+            <div class="container">
+                <figure class="highcharts-figure">
+                  <div id="container_region"></div>
+                </figure>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+Highcharts.chart('container_active', {
+  chart: {
+    scrollablePlotArea: {
+      minWidth: 700
+    }
+  },
+
+
+  title: {
+    text: 'Актив',
+    align: 'left'
+  },
+
+  subtitle: {
+    text: 'Период: {{ title_activ|safe }}',
+    align: 'left'
+  },
+
+  xAxis: {
+    tickWidth: 0,
+    gridLineWidth: 1,
+    labels: {
+      align: 'left',
+    },
+    categories: {{ date_activ|safe }},
+
+  },
+  yAxis: [{
+
+    title: {
+      text: null
+    },
+    labels: {
+      align: 'left',
+      x: 3,
+      y: 16,
+      format: '{value:.,0f}'
+    },
+    showFirstLabel: false
+  }, {
+    linkedTo: 0,
+    gridLineWidth: 0,
+    opposite: true,
+    title: {
+      text: null
+    },
+    labels: {
+      align: 'right',
+      x: -3,
+      y: 16,
+      format: '{value:.,0f}'
+    },
+    showFirstLabel: false
+  }],
+
+  legend: {
+    align: 'left',
+    verticalAlign: 'top',
+    borderWidth: 0
+  },
+  tooltip: {
+    shared: true,
+    crosshairs: true,
+  },
+
+  plotOptions: {
+    series: {
+      cursor: 'pointer',
+      className: 'popup-on-click',
+      marker: {
+        lineWidth: 1
+      }
+    }
+  },
+
+  series: [{
+    name: 'Актив',
+    lineWidth: 4,
+    marker: {
+      radius: 4
+    },
+    data: {{ values_activ }},
+    },
+  ]
+});
+</script>
+
+<script>
+Highcharts.chart('container_register', {
+  chart: {
+    scrollablePlotArea: {
+      minWidth: 700
+    }
+  },
+
+  title: {
+    text: 'Регистрация',
+    align: 'left'
+  },
+
+  subtitle: {
+    text: 'Период: {{ title_register|safe }}',
+    align: 'left'
+  },
+
+  xAxis: {
+    tickWidth: 0,
+    gridLineWidth: 1,
+    labels: {
+      align: 'left',
+    },
+    categories: {{ date_register|safe }},
+
+  },
+  yAxis: [{
+
+    title: {
+      text: null
+    },
+    labels: {
+      align: 'left',
+      x: 3,
+      y: 16,
+      format: '{value:.,0f}'
+    },
+    showFirstLabel: false
+  }, {
+    linkedTo: 0,
+    gridLineWidth: 0,
+    opposite: true,
+    title: {
+      text: null
+    },
+    labels: {
+      align: 'right',
+      x: -3,
+      y: 16,
+      format: '{value:.,0f}'
+    },
+    showFirstLabel: false
+  }],
+
+  legend: {
+    align: 'left',
+    verticalAlign: 'top',
+    borderWidth: 0
+  },
+  tooltip: {
+    shared: true,
+    crosshairs: true,
+  },
+
+  plotOptions: {
+    series: {
+      cursor: 'pointer',
+      className: 'popup-on-click',
+      marker: {
+        lineWidth: 1
+      }
+    }
+  },
+
+  series: [{
+    name: 'Новых',
+    lineWidth: 4,
+    marker: {
+      radius: 4
+    },
+    data: {{ values_register }},
+    },
+  ]
+});
+</script>
+
+<script>
+// Data retrieved from https://netmarketshare.com/
+// Build the chart
+Highcharts.chart('container_region', {
+  chart: {
+    plotBackgroundColor: null,
+    plotBorderWidth: null,
+    plotShadow: false,
+    type: 'pie'
+  },
+  title: {
+    text: 'Соотношение по регионам',
+    align: 'left'
+  },
+  subtitle: {
+    text: 'Всего:</br>{% for i in regions_data %}{{ i.name }}: {{ i.users_count }} </br>{% endfor %}',
+    align: 'left'
+  },
+  tooltip: {
+    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+  },
+  accessibility: {
+    point: {
+      valueSuffix: '%'
+    }
+  },
+  plotOptions: {
+    pie: {
+      allowPointSelect: true,
+      cursor: 'pointer',
+      dataLabels: {
+        enabled: false
+      },
+      showInLegend: true
+    }
+  },
+  series: [{
+    name: 'Brands',
+    colorByPoint: true,
+    data: [
+        {% for i in regions_data %}
+            {
+              name: ['{{ i.name }}'],
+              y: {{ i.users_count }},
+            },
+        {% endfor %}
+
+    ]
+  }]
+});
+</script>
+{% endblock %}

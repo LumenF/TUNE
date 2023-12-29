@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+<style>
+div.container4 {
+    height: 10em;
+    position: relative }
+div.container4 p {
+    margin: 0;
+    background: yellow;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) }
+
+</style>
+</head>
+<body>
+{% if file == False %}
+
+
+<div class=container4>
+  <p>CSV файл не обнаружен!
+</div>
+{% else %}
+<table border="1">
+    {% for i in data %}
+        <tr>
+            {% if i.Price == '0' %}
+                <td>{{i.Title}}</td>
+                <td style="background: rgba(255,0,0,0.19); padding: 10px;">{{i.Price}}</td>
+            {% else %}
+                <td>{{i.Title}}</td>
+                <td style="background: rgb(64,255,0,0.56); padding: 10px;">{{i.Price}}</td>
+            {% endif %}
+
+        </tr>
+
+    {% endfor %}
+
+</table>
+{% endif %}
+</body>
+</html>

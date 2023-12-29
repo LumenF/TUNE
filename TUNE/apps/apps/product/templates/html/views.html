@@ -1,0 +1,119 @@
+{% extends 'html/base.html' %}
+
+{% block content %}
+{% load static %}
+
+
+<div class="wrapper">
+{#  <div class="sidebar">#}
+{#      <div class="block_sidebar">#}
+{#          <h5>Месяц</h5>#}
+{#            <ul>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=1 %}">Январь</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=2 %}">Февраль</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=3 %}">Март</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=4 %}">Апрель</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=5 %}">Май</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=6 %}">Июнь</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=7 %}">Июль</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=8 %}">Август</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=9 %}">Сентябрь</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=10 %}">Октябрь</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=11 %}">Ноябрь</a></li>#}
+{#                <li><a href="{% url 'category_views' year=request.resolver_match.kwargs.year month=12 %}">Декабрь</a></li>#}
+{#            </ul>#}
+{#      </div>#}
+{#      <div class="block_sidebar">#}
+{#          <h5>Год</h5>#}
+{#            <ul>#}
+{#              <li><a href="{% url 'category_views' year=2023 month=request.resolver_match.kwargs.month %}">2023</a></li>#}
+{#              <li><a href="{% url 'category_views' year=2024 month=request.resolver_match.kwargs.month %}">2024</a></li>#}
+{#            </ul>#}
+{#      </div>#}
+{##}
+{#  </div>#}
+  <div class="content">
+        <div class="chart">
+            <div class="content">
+                <div class="container">
+                    <figure class="highcharts-figure">
+                      <div id="container"></div>
+                      <p class="highcharts-description">
+
+                      </p>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+Highcharts.chart('container', {
+  chart: {
+    type: 'bar'
+  },
+  title: {
+    text: 'Избранное',
+    align: 'left'
+  },
+  subtitle: {
+    text: 'Источник: Бот: Активные товары и забронированные',
+    align: 'left'
+  },
+  xAxis: {
+    categories: {{ products_name| safe }},
+    title: {
+      text: null
+    }
+  },
+  yAxis: {
+    min: 0,
+    title: {
+      text: null,
+      align: 'high'
+    },
+    labels: {
+      overflow: 'justify'
+    }
+  },
+  tooltip: {
+    valueSuffix: ' '
+  },
+  plotOptions: {
+    bar: {
+      dataLabels: {
+        enabled: true
+      }
+    }
+  },
+  legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'top',
+    x: -40,
+    y: 80,
+    floating: true,
+    borderWidth: 1,
+    backgroundColor:
+      Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+    shadow: true
+  },
+  credits: {
+    enabled: false
+  },
+  series: [
+  {
+    name: 'Просмотры',
+    data: {{ count_view|safe }},
+  },
+  {
+    name: 'В избранном',
+    data: {{ count|safe }},
+  }
+
+  ]
+});
+</script>
+{% endblock %}

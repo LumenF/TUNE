@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}Главная{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static%}
+
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<header>
+    <nav class="navbar navbar-expand-lg" id="nav_header">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img class="logo" src="{% static 'img/logo.svg' %}" alt="Logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Главная</a>
+                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Каталог
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Планшет</a></li>
+                                <li><a class="dropdown-item" href="#">Смартфон</a></li>
+                                <li><a class="dropdown-item" href="#">Ноутбуки</a></li>
+                            </ul>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Доставка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">О нас</a>
+                    </li>
+                  </ul>
+                        <div class="cart_wrapper">
+                <div class="cart" style="">
+                    <div class="cart_ico">
+                        <a class="navbar-brand" href="#"><img class="cart_img" src="{% static 'img/cart.png' %}" alt="Logo"></a>
+                    </div>
+                    <div class="personal_ico">
+                        <a class="navbar-brand" href="#"><img class="user_img" src="{% static 'img/user.png' %}" alt="Logo"></a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </nav>
+
+</header>
+   <div class="mobile_header" style="width: 100%;">
+        <div class="mobile_header_wrapper" style="width: 100%;">
+            <div class="mobile_header_ico" style="float: left; padding: 10px">
+                <a class="navbar-brand" href="#"><img class="logo" src="{% static 'img/logo.svg' %}" alt="Logo"></a>
+            </div>
+            <div class="mobile_header_city" style="float: right; padding: 10px">
+                  <a class="btn btn-secondary dropdown-toggle" style="background: white; color: black; border: none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      Санкт-Петербург
+                  </a>
+
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="#">Санкт-Петербург</a></li>
+                    <li><a class="dropdown-item" href="#">Москва</a></li>
+                  </ul>
+                </div>
+            </div>
+        </div>
+<body>
+
+    <div class="main">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="footer">
+
+    </div>
+</body>
+<footer class="footer fixed-bottom">
+    <div class="" style="width: 100%; border-top: 1px solid #eeeeee; display: flex; flex-direction: row; justify-content: space-between; padding-left: 2%; padding-right: 2%;">
+
+    <div class="nav_footer activ" style="display: flex; flex-direction: column; width: 20%; text-align: center; justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <a href="{% url 'index' %}"><img id='index' src="{% static 'img/nav/house_white.svg' %}" alt="..." ></a>
+        </div>
+        <p id='index_text' style="font-size: 70%;">Главная</p>
+    </div>
+    <div class="nav_footer" style="display: flex; flex-direction: column; width: 20%; text-align: center; justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <a href="{% url 'catalog' category='Phone' %}"><img id='catalog' src="{% static 'img/nav/catalog_white.svg' %}" alt="..." style="color: red;" ></a>
+        </div>
+        <p id='catalog_text' style="font-size: 70%;">Каталог</p>
+    </div>
+    <div class="nav_footer" style="display: flex; flex-direction: column; width: 20%; text-align: center; justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <a href="{% url 'favorite' %}"><img id='favorite' src="{% static 'img/nav/love_white.svg' %}" alt="..." ></a>
+        </div>
+        <p id='favorite_text' style="font-size: 70%;">Избранное</p>
+    </div>
+    <div class="nav_footer" style="display: flex; flex-direction: column; width: 20%; text-align: center; justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <a href="{% url 'cart' %}"><img id='cart' src="{% static 'img/nav/cart_white.svg' %}" alt="..." ></a>
+        </div>
+        <p id='cart_text' style="font-size: 70%;">Корзина</p>
+    </div>
+    <div class="nav_footer" style="display: flex; flex-direction: column; width: 20%; text-align: center; justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <a href="{% url 'me' %}"><img id='me' src="{% static 'img/nav/user_white.svg' %}" alt="..." ></a>
+        </div>
+        <p id='me_text' style="font-size: 70%;">Кабинет</p>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+let crr_page = 'index'
+if (/index/.test(location.href)) {
+    crr_page = 'index'
+} else if (/catalog/.test(location.href)) {
+    crr_page = 'catalog'
+} else if (/favorite/.test(location.href)) {
+    crr_page = 'favorite'
+} else if (/cart/.test(location.href)) {
+    crr_page = 'cart'
+} else if (/me/.test(location.href)) {
+    crr_page = 'me'
+}
+const image = document.getElementById(crr_page);
+const text = document.getElementById(crr_page + '_text');
+
+if (crr_page) {
+    const catalogImg = document.getElementById(crr_page);
+    catalogImg.src = catalogImg.src.replace("white", "red");
+    catalogImg.style.width = "30px";
+    text.style.color = "red";
+}
+
+</script>
+</footer>
+</html>

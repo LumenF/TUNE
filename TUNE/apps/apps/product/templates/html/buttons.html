@@ -1,0 +1,21 @@
+{% extends 'admin/change_list.html' %}
+{% block object-tools %}
+<div style="display: flex; flex-direction: row; flex-wrap: wrap">
+    <form action="start" method="POST" style="margin-left: 10px; padding: 1px;">
+        {% csrf_token %}
+        <input type="submit" value="Запустить актуализацию" style=" background: #f00202; color: white;"/>
+
+    <form action="test" method="POST" style="margin-left: 10px; padding: 1px;">
+        {% csrf_token %}
+        <input type="submit" value="Тестировать прайсы" style=" background: #03a108; color: white;" />
+    </form>
+
+    <form action="get" method="POST" style="margin-left: 10px; padding: 1px;">
+        {% csrf_token %}
+{#        <input type="submit" value="Обновить каталог" style=" background: #03a108; color: white;" />#}
+        <input type="submit" value="Обновить каталог" style=" background: #03a108; color: white;" />
+    </form>
+
+</div>
+{{ block.super }}
+{% endblock %}
