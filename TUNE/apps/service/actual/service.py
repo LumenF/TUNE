@@ -159,6 +159,27 @@ class CSVServiceNew:
                 product.amount = max_price
                 product.save()
 
+        # Находим максимальные цены для товаров с DUAL SIM в каждой подгруппе
+        max_prices_with_dual = (
+            NewProductModel.objects.filter(amount__gt='0', params__SIM='dual sim')
+            .values('params__Серия', 'params__Память', 'params__Поставщик')  # Учтем различия в памяти
+            .annotate(max_price=Max('amount'))
+        )
+        # Обновляем цены для товаров с eSIM
+        for max_price_info in max_prices_with_dual:
+            max_price = max_price_info['max_price']
+            series = max_price_info['params__Серия']
+            memory = max_price_info['params__Память']
+            provider = max_price_info['params__Поставщик']
+            products_without_price = NewProductModel.objects.filter(
+                params__Серия=series,
+                params__SIM='esim',
+                params__Поставщик=provider,
+                params__Память=memory,
+                amount='0')
+            for product in products_without_price:
+                product.amount = max_price
+                product.save()
         # Находим максимальные цены для товаров без eSIM в каждой подгруппе
         max_prices_without_esim = (
             NewProductModel.objects.filter(amount__gt='0', params__SIM__isnull=True)
