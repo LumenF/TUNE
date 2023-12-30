@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bd88ed41-bece-4fae-9df4-cd744ec79bcd" name="Changes" comment="sad">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/service/actual/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/service/actual/service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +63,7 @@
     "WebServerToolWindowFactoryState": "false",
     "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/www/Projects/P2P/BACKEND/USER",
+    "last_opened_file_path": "/home/www/Projects/TUNE/TUNE/TUNE_BOT",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -379,6 +378,8 @@
       <workItem from="1703831389733" duration="1452000" />
       <workItem from="1703837150972" duration="4431000" />
       <workItem from="1703919356171" duration="14000" />
+      <workItem from="1703927201867" duration="116000" />
+      <workItem from="1703928746724" duration="16000" />
     </task>
     <task id="LOCAL-00001" summary="sad">
       <created>1685847765787</created>
@@ -663,7 +664,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703214701287</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="sad">
+      <option name="closed" value="true" />
+      <created>1703927308096</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1703927308096</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
