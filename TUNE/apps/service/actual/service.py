@@ -124,6 +124,17 @@ class CSVServiceNew:
 
                     matching_titles.append({'title': product['title'], 'amount': item.amount, 'markup': item.markup,
                                             'tilda_UID': product['tilda_UID']})
+                #
+                if params and all(
+                        (value.replace(',', '') in params.values()) or (key == 'dual sim' and 'dual sim' in params) for
+                        key, value in values_to_match.items()):
+
+                    # Если в values нет ключа 'SIM', то 'eSIM' не должен быть в названии
+                    if 'dual sim' not in values_to_match and 'dual sim' in product['title'].lower():
+                        continue
+
+                    matching_titles.append({'title': product['title'], 'amount': item.amount, 'markup': item.markup,
+                                            'tilda_UID': product['tilda_UID']})
             matching_products.append({'values': values_to_match, 'matching_titles': matching_titles})
         # Обновляем цены для соответствующих товаров
         for i in matching_products:
@@ -162,10 +173,9 @@ class CSVServiceNew:
         # Находим максимальные цены для товаров с DUAL SIM в каждой подгруппе
         max_prices_with_dual = (
             NewProductModel.objects.filter(amount__gt='0', params__SIM='dual sim')
-            .values('params__Серия', 'params__Память', 'params__Поставщик')  # Учтем различия в памяти
+            .values('params__Серия', 'params__Память', 'params__Поставщик')
             .annotate(max_price=Max('amount'))
         )
-        # Обновляем цены для товаров с eSIM
         for max_price_info in max_prices_with_dual:
             max_price = max_price_info['max_price']
             series = max_price_info['params__Серия']
@@ -173,13 +183,14 @@ class CSVServiceNew:
             provider = max_price_info['params__Поставщик']
             products_without_price = NewProductModel.objects.filter(
                 params__Серия=series,
-                params__SIM='esim',
+                params__SIM='dual sim',
                 params__Поставщик=provider,
                 params__Память=memory,
                 amount='0')
             for product in products_without_price:
                 product.amount = max_price
                 product.save()
+
         # Находим максимальные цены для товаров без eSIM в каждой подгруппе
         max_prices_without_esim = (
             NewProductModel.objects.filter(amount__gt='0', params__SIM__isnull=True)
