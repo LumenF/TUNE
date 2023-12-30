@@ -31,7 +31,7 @@ async def index_new(
     # )
     await client.send_message(
         chat_id=message.from_user.id,
-        text='Данный раздел временно недоступен, свяжитесь с менеджером.',
+        text='Смотрите цены и делайте заказ на нашем сайте - tuneapp.ru',
     )
     return
     # markup = await kb.kb_index()

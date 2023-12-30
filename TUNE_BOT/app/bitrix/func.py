@@ -1,26 +1,24 @@
 import datetime
 import json
 from pprint import pprint
-
 import requests
 from aiogram import types
 from aiogram.filters import Text, Command
 from aiogram.fsm.context import FSMContext
-
 from conf.conf_bot import dp, text, client, BITRIX_URL, api
 
 
 async def bitrix_valid(
         message: types.Message
 ):
-    x = message.dict()
-    x['from'] = x['from_user']
-    x.pop('date')
-    x.pop('from_user')
-
+    m_dict = message.dict()
+    m_dict['from'] = m_dict['from_user']
+    m_dict.pop('date')
+    m_dict.pop('from_user')
+    m_dict['date'] = str(datetime.datetime(2023, 7, 10, 1, 48, 18, tzinfo=datetime.timezone.utc))
     out = {
         'update_id': 123,
-        'message': x
+        'message': m_dict
     }
     data = json.dumps(out)
     requests.post(BITRIX_URL, data=data)
@@ -32,9 +30,7 @@ async def bitrix(
 ):
     event: types.Update = kwargs.get('event_update')
     await api.press_btn_manager(event.message.from_user.id)
-
     x = event.dict()
-
     x['message']['from'] = x['message']['from_user']
     x['message'].pop('date')
     x['message'].pop('from_user')
@@ -88,14 +84,15 @@ async def bitrix_inl(
                                           f'\n\nID клиента {callback.from_user.id}' \
                                           f'\n\nСсылка на клиента:' \
                                           f'\nhttps://tune-bot.ru/user/tgusermodel/?q={callback.from_user.id}'
-
-    x.pop('date')
     x['from'] = callback.from_user.dict()
+    x.pop('date')
     x.pop('from_user')
-
-    zz = {'message': x,
-          'update_id': 123}
-    data = json.dumps(zz)
+    x['date'] = str(datetime.datetime(2023, 7, 10, 1, 48, 18, tzinfo=datetime.timezone.utc))
+    out = {
+        'update_id': 123,
+        'message': x
+    }
+    data = json.dumps(out)
     requests.post(BITRIX_URL, data=data)
     await client.send_message(
         chat_id=callback.from_user.id,
